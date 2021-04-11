@@ -10,10 +10,6 @@ export const defineSpellCheckerMode = (underlyingTokenAnalyzer) => {
     typoObject = typo;
   });
 
-  const wordsInCurrentMDToken = {
-    token: null,
-    symbolsLeft: 0,
-  };
 
   CodeMirror.defineMode("spell-checker", (codeMirrorConfig, modeConfig) => {
     return {
@@ -23,6 +19,9 @@ export const defineSpellCheckerMode = (underlyingTokenAnalyzer) => {
           const word = underlyingTokenAnalyzer.extractWordFromStream(stream);
           if (word.length) {
             advancePosition(stream, word.length);
+            if (isDictionaryLoaded && !typoObject.check(word)) {
+              return "error";
+            }
             return null;
           }
         }
