@@ -26,7 +26,7 @@ export const defineSpellCheckerMode = (underlyingTokenAnalyzer) => {
           const word = underlyingTokenAnalyzer.extractWordFromStream(stream);
           if (word.length) {
             advancePosition(stream, word.length);
-            if (dictionaries.length && !wordSpellWithKnownDictionaries(dictionaries, word)) {
+            if (dictionaries.length && !spellWordWithKnownDictionaries(dictionaries, word)) {
               return "error";
             }
             return null;
@@ -36,6 +36,34 @@ export const defineSpellCheckerMode = (underlyingTokenAnalyzer) => {
       },
     };
   });
+
+  return {
+    getSuggestions(codeEditor, max = 3) {
+      const position = codeEditor.getDoc().getCursor();
+      const token = codeEditor.getTokenAt(position);
+      const words = underlyingTokenAnalyzer.extractWordsFromToken(token);
+      const results = [];
+      let startIndex = 0;
+      for (let word of words) {
+        const findIndex = token.string.indexOf(word, startIndex);
+        const suggestions = suggestionWordWithKnownDictionaries(dictionaries, word);
+        if (suggestions.length > 0) {  
+          results.push({
+            from: {
+              line: position.line,
+              ch: token.start + findIndex
+            },
+            to: {
+              line: position.line,
+              ch: token.start + findIndex + word.length - 1,
+            },
+            suggestions: suggestions.slice(0, max),
+          });
+        }
+      }
+      return results; 
+    }
+  }
 };
 
 /*
@@ -46,27 +74,44 @@ export const defineSpellCheckerMode = (underlyingTokenAnalyzer) => {
 
   Check the word if its max coefficient greater than 0.5
 */    
-const wordSpellWithKnownDictionaries = (dictionaries, word) => {
-  let chosenTypo = null;
-  let maxSimilarity = 0;
-  for (let typo of dictionaries) {
-    const regex = heuristicAlphabetRegex[typo.dictionary];
-    if (!regex) continue;
-    const similarity = calcDictionarySimilarity(typo, word);
-    if (similarity > maxSimilarity) {
-      maxSimilarity = similarity;
-      chosenTypo = typo;
-    }
-  }
+const spellWordWithKnownDictionaries = (dictionaries, word) => {
+  const { typo, maxSimilarity } = getMaxSimilarity(dictionaries, word);
 
   if (maxSimilarity > 0.5) {
-    return chosenTypo.check(word);
+    return typo.check(word);
   }
 
   return true;
 }
 
-const calcDictionarySimilarity = (typo, word) => {
+const suggestionWordWithKnownDictionaries = (dictionaries, word) => {
+  const { typo, maxSimilarity } = getMaxSimilarity(dictionaries, word);
+
+  if (maxSimilarity > 0.5) {
+    return typo.suggest(word);
+  }
+  return [];
+}
+
+const getMaxSimilarity = (dictionaries, word) => {
+  let chosenTypo = null;
+  let maxSimilarity = 0;
+  if (word.length === 0) {
+    return { typo: dictionaries[0], maxSimilarity: 0 };
+  }  
+  for (let typo of dictionaries) {
+    const regex = heuristicAlphabetRegex[typo.dictionary];
+    if (!regex) continue;
+    const similarity = calcDictionaryMaxSimilarity(typo, word);
+    if (similarity > maxSimilarity) {
+      maxSimilarity = similarity;
+      chosenTypo = typo;
+    }
+  }
+  return { typo: chosenTypo, maxSimilarity };
+}
+
+const calcDictionaryMaxSimilarity = (typo, word) => {
   const match = word.match(heuristicAlphabetRegex[typo.dictionary]);
   if (match === null) return 0;
   const letter_matches_count = match.reduce((acc, s) => acc + s.length, 0);

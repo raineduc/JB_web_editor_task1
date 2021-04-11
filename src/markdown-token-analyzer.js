@@ -24,14 +24,17 @@ const { header, code, list1, list2, list3, imageAltText, linkText, em, strong } 
 
 const regex = `${header}|${code}|${list1}}|${list2}|${list3}|${imageAltText}|${linkText}|${em}|${strong}`;
 
-const wordBoundaryRegex = /^[^#!\[\]*_\\<>` (~:]+/;
+
+const wordBoundary = "#!\\[\\]*_\\\\<>` (~:";
+const wordRegex = new RegExp(`^[^${wordBoundary}]+`);
+const wordFromTokenRegex = new RegExp(`[^${wordBoundary}]+`, 'g');
 
 const checkedTypesRegex = new RegExp(regex);
 
 export class MarkdownTokenAnalyzer {
   constructor(props) {
     this.regex = regex;
-    this.wordBoundaryRegex = wordBoundaryRegex;
+    this.wordBoundaryRegex = wordRegex;
   }
   
   shouldTokenBeChecked(token) {
@@ -40,7 +43,12 @@ export class MarkdownTokenAnalyzer {
   }
 
   extractWordFromStream(stream) {
-    const matched = stream.match(wordBoundaryRegex, false);
+    const matched = stream.match(wordRegex, false);
     return matched ? matched[0] : "";
+  }
+
+  extractWordsFromToken(token) {
+    const result = token.string.match(wordFromTokenRegex);
+    return result ? result : [];
   }
 }
