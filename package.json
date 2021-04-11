@@ -16,6 +16,9 @@
   "license": "ISC",
   "dependencies": {
     "codemirror": "^5.60.0",
+    "dompurify": "^2.2.7",
+    "lodash.throttle": "^4.1.1",
+    "showdown": "^1.9.1",
     "typo-js": "^1.2.0"
   },
   "devDependencies": {
