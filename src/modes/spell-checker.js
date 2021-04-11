@@ -18,9 +18,6 @@ export const defineSpellCheckerMode = (underlyingTokenAnalyzer) => {
     dictionaries.push(typo);
   });
 
-
-  console.log("au");
-
   CodeMirror.defineMode("spell-checker", (codeMirrorConfig, modeConfig) => {
     return {
       token(stream) {
