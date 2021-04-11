@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build-dev": "webpack --mode development ./src/index.js -o ./dist",
-    "build-prod": "webpack --mode production ./src/index.js -o ./dist"
+    "build-prod": "webpack --mode production ./src/index.js -o ./dist",
+    "server": "http-server ./dist" 
   },
   "repository": {
     "type": "git",
@@ -22,6 +23,7 @@
     "typo-js": "^1.2.0"
   },
   "devDependencies": {
+    "http-server": "^0.12.3",
     "webpack": "^5.31.2",
     "webpack-cli": "^4.6.0"
   }
