@@ -15,7 +15,8 @@
   "author": "raineduc",
   "license": "ISC",
   "dependencies": {
-    "codemirror": "^5.60.0"
+    "codemirror": "^5.60.0",
+    "typo-js": "^1.2.0"
   },
   "devDependencies": {
     "webpack": "^5.31.2",
