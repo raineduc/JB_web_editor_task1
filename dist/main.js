@@ -96,7 +96,7 @@ eval("var __dirname = \"/\";\n/* globals chrome: false */\n/* globals __dirname:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var codemirror__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! codemirror */ \"./node_modules/codemirror/lib/codemirror.js\");\n/* harmony import */ var codemirror__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(codemirror__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var lodash_throttle__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash.throttle */ \"./node_modules/lodash.throttle/index.js\");\n/* harmony import */ var lodash_throttle__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash_throttle__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var _modes_spell_checker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modes/spell-checker */ \"./src/modes/spell-checker.js\");\n/* harmony import */ var _sugggestion_display__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./sugggestion-display */ \"./src/sugggestion-display.js\");\n/* harmony import */ var _markdown_token_analyzer__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./markdown-token-analyzer */ \"./src/markdown-token-analyzer.js\");\n/* harmony import */ var _markdown_preview__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./markdown-preview */ \"./src/markdown-preview.js\");\n/* harmony import */ var codemirror_mode_markdown_markdown__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! codemirror/mode/markdown/markdown */ \"./node_modules/codemirror/mode/markdown/markdown.js\");\n/* harmony import */ var codemirror_mode_markdown_markdown__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(codemirror_mode_markdown_markdown__WEBPACK_IMPORTED_MODULE_6__);\n\n\n\n\n\n\n\n\nconst markdownPreview = new _markdown_preview__WEBPACK_IMPORTED_MODULE_5__.MarkdownPreview();\nconst suggestionDisplay = new _sugggestion_display__WEBPACK_IMPORTED_MODULE_3__.SuggestionDisplay();\n\ndocument.body.appendChild(suggestionDisplay.getElement());\n\nconst spellChecker = (0,_modes_spell_checker__WEBPACK_IMPORTED_MODULE_2__.defineSpellCheckerMode)(new _markdown_token_analyzer__WEBPACK_IMPORTED_MODULE_4__.MarkdownTokenAnalyzer());\n\nconst codeEditor = codemirror__WEBPACK_IMPORTED_MODULE_0___default()(document.body, {\n  mode: \"markdown\",\n  spellcheck: true,\n  lineNumbers: true,\n});\n\nconst updateMarkdownPreview = lodash_throttle__WEBPACK_IMPORTED_MODULE_1___default()((data) => markdownPreview.updateData(data), 500);\n\nconst findSuggestions = lodash_throttle__WEBPACK_IMPORTED_MODULE_1___default()((codeEditor) => {\n  const suggestions = spellChecker.getSuggestions(codeEditor, 3);\n  if (suggestions.length > 0) {\n    suggestionDisplay.addSuggestions(suggestions[0].suggestions);\n  } else {\n    suggestionDisplay.addSuggestions([\"Нет предложений\"]);\n  }\n}, 500);\n\ndocument.body.appendChild(markdownPreview.build(codeEditor.getDoc().getValue()));\n\ncodeEditor.on(\"change\", () => {\n  updateMarkdownPreview(codeEditor.getDoc().getValue());\n});\n\ncodeEditor.on(\"mousedown\", findSuggestions);\n\ncodeEditor.on(\"keydown\", (codeEditor, e) => {\n  // right and left arrows\n  if (e.key === \"ArrowLeft\" || e.key === \"ArrowRight\") {\n    findSuggestions(codeEditor);\n  }\n});\n\ncodeEditor.addOverlay('spell-checker');\n\n\n//# sourceURL=webpack://JB_task/./src/index.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var codemirror__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! codemirror */ \"./node_modules/codemirror/lib/codemirror.js\");\n/* harmony import */ var codemirror__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(codemirror__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var lodash_throttle__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash.throttle */ \"./node_modules/lodash.throttle/index.js\");\n/* harmony import */ var lodash_throttle__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash_throttle__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var _modes_spell_checker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modes/spell-checker */ \"./src/modes/spell-checker/index.js\");\n/* harmony import */ var _sugggestion_display__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./sugggestion-display */ \"./src/sugggestion-display.js\");\n/* harmony import */ var _markdown_token_analyzer__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./markdown-token-analyzer */ \"./src/markdown-token-analyzer.js\");\n/* harmony import */ var _markdown_preview__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./markdown-preview */ \"./src/markdown-preview.js\");\n/* harmony import */ var codemirror_mode_markdown_markdown__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! codemirror/mode/markdown/markdown */ \"./node_modules/codemirror/mode/markdown/markdown.js\");\n/* harmony import */ var codemirror_mode_markdown_markdown__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(codemirror_mode_markdown_markdown__WEBPACK_IMPORTED_MODULE_6__);\n\n\n\n\n\n\n\n\nconst markdownPreview = new _markdown_preview__WEBPACK_IMPORTED_MODULE_5__.MarkdownPreview();\nconst suggestionDisplay = new _sugggestion_display__WEBPACK_IMPORTED_MODULE_3__.SuggestionDisplay();\n\ndocument.body.appendChild(suggestionDisplay.getElement());\n\nconst spellChecker = (0,_modes_spell_checker__WEBPACK_IMPORTED_MODULE_2__.defineSpellCheckerMode)(new _markdown_token_analyzer__WEBPACK_IMPORTED_MODULE_4__.MarkdownTokenAnalyzer());\n\nconst codeEditor = codemirror__WEBPACK_IMPORTED_MODULE_0___default()(document.body, {\n  mode: \"markdown\",\n  spellcheck: true,\n  lineNumbers: true,\n});\n\nconst updateMarkdownPreview = lodash_throttle__WEBPACK_IMPORTED_MODULE_1___default()((data) => markdownPreview.updateData(data), 500);\n\nconst findSuggestions = lodash_throttle__WEBPACK_IMPORTED_MODULE_1___default()((codeEditor) => {\n  const suggestions = spellChecker.getSuggestions(codeEditor, 3);\n  if (suggestions.length > 0) {\n    suggestionDisplay.addSuggestions(suggestions[0].suggestions);\n  } else {\n    suggestionDisplay.addSuggestions([\"Нет предложений\"]);\n  }\n}, 500);\n\ndocument.body.appendChild(markdownPreview.build(codeEditor.getDoc().getValue()));\n\ncodeEditor.on(\"change\", () => {\n  updateMarkdownPreview(codeEditor.getDoc().getValue());\n});\n\ncodeEditor.on(\"mousedown\", findSuggestions);\n\ncodeEditor.on(\"keydown\", (codeEditor, e) => {\n  // right and left arrows\n  if (e.key === \"ArrowLeft\" || e.key === \"ArrowRight\") {\n    findSuggestions(codeEditor);\n  }\n});\n\ncodeEditor.addOverlay('spell-checker');\n\n\n//# sourceURL=webpack://JB_task/./src/index.js?");
 
 /***/ }),
 
@@ -122,14 +122,14 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 
 /***/ }),
 
-/***/ "./src/modes/spell-checker.js":
-/*!************************************!*\
-  !*** ./src/modes/spell-checker.js ***!
-  \************************************/
+/***/ "./src/modes/spell-checker/index.js":
+/*!******************************************!*\
+  !*** ./src/modes/spell-checker/index.js ***!
+  \******************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"defineSpellCheckerMode\": () => (/* binding */ defineSpellCheckerMode)\n/* harmony export */ });\n/* harmony import */ var codemirror__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! codemirror */ \"./node_modules/codemirror/lib/codemirror.js\");\n/* harmony import */ var codemirror__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(codemirror__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var typo_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! typo-js */ \"./node_modules/typo-js/typo.js\");\n/* harmony import */ var typo_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(typo_js__WEBPACK_IMPORTED_MODULE_1__);\n\n\n\nconst heuristicAlphabetRegex = {\n  \"ru\": /[а-яА-Я0-9-]/g,\n  \"en-US\": /[\\w-]/g,\n};\n\nconst defineSpellCheckerMode = (underlyingTokenAnalyzer) => {\n  const dictionaries = [];\n\n  loadEnUSDictionary().then((typo) => {\n    dictionaries.push(typo);\n    dictionaries[typo.dictionary] = typo;\n  });\n\n  loadRUDictionary().then((typo) => {\n    dictionaries.push(typo);\n  });\n\n  codemirror__WEBPACK_IMPORTED_MODULE_0___default().defineMode(\"spell-checker\", (codeMirrorConfig, modeConfig) => {\n    return {\n      token(stream) {\n        const baseToken = stream.baseToken();\n        if (underlyingTokenAnalyzer.shouldTokenBeChecked(baseToken)) {\n          const word = underlyingTokenAnalyzer.extractWordFromStream(stream);\n          if (word.length) {\n            advancePosition(stream, word.length);\n            if (dictionaries.length && !spellWordWithKnownDictionaries(dictionaries, word)) {\n              return \"error\";\n            }\n            return null;\n          }\n        }\n        stream.next();\n      },\n    };\n  });\n\n  return {\n    getSuggestions(codeEditor, max = 3) {\n      const position = codeEditor.getDoc().getCursor();\n      const token = codeEditor.getTokenAt(position);\n      const words = underlyingTokenAnalyzer.extractWordsFromToken(token);\n      const results = [];\n      let startIndex = 0;\n      for (let word of words) {\n        const findIndex = token.string.indexOf(word, startIndex);\n        const suggestions = suggestionWordWithKnownDictionaries(dictionaries, word);\n        if (suggestions.length > 0) {  \n          results.push({\n            from: {\n              line: position.line,\n              ch: token.start + findIndex\n            },\n            to: {\n              line: position.line,\n              ch: token.start + findIndex + word.length - 1,\n            },\n            suggestions: suggestions.slice(0, max),\n          });\n        }\n      }\n      return results; \n    }\n  }\n};\n\n/*\n  Simple heuristics dictionary selection algorithm\n  Similarity - coefficient between [0, 1], which is determined by the formula coef = n/N\n  where n - count of alphabet regex matched letters\n  N - length of incoming word \n\n  Check the word if its max coefficient greater than 0.5\n*/    \nconst spellWordWithKnownDictionaries = (dictionaries, word) => {\n  const { typo, maxSimilarity } = getMaxSimilarity(dictionaries, word);\n\n  if (maxSimilarity > 0.5) {\n    return typo.check(word);\n  }\n\n  return true;\n}\n\nconst suggestionWordWithKnownDictionaries = (dictionaries, word) => {\n  const { typo, maxSimilarity } = getMaxSimilarity(dictionaries, word);\n\n  if (maxSimilarity > 0.5) {\n    return typo.suggest(word);\n  }\n  return [];\n}\n\nconst getMaxSimilarity = (dictionaries, word) => {\n  let chosenTypo = null;\n  let maxSimilarity = 0;\n  if (word.length === 0) {\n    return { typo: dictionaries[0], maxSimilarity: 0 };\n  }  \n  for (let typo of dictionaries) {\n    const regex = heuristicAlphabetRegex[typo.dictionary];\n    if (!regex) continue;\n    const similarity = calcDictionaryMaxSimilarity(typo, word);\n    if (similarity > maxSimilarity) {\n      maxSimilarity = similarity;\n      chosenTypo = typo;\n    }\n  }\n  return { typo: chosenTypo, maxSimilarity };\n}\n\nconst calcDictionaryMaxSimilarity = (typo, word) => {\n  const match = word.match(heuristicAlphabetRegex[typo.dictionary]);\n  if (match === null) return 0;\n  const letter_matches_count = match.reduce((acc, s) => acc + s.length, 0);\n  return letter_matches_count / word.length;\n}\n\nconst loadEnUSDictionary = async () => {\n  const aff_data = await (\n    await fetch(\n      \"/dictionaries/en-US/index.aff\"\n    )\n  ).text();\n  const dic_data = await (\n    await fetch(\n      \"/dictionaries/en-US/index.dic\"\n    )\n  ).text();\n  return new (typo_js__WEBPACK_IMPORTED_MODULE_1___default())(\"en-US\", aff_data, dic_data);\n};\n\nconst loadRUDictionary = async () => {\n  const aff_data = await (\n    await fetch(\n      \"/dictionaries/ru/index.aff\"\n    )\n  ).text();\n  const dic_data = await (\n    await fetch(\n      \"/dictionaries/ru/index.dic\"\n    )\n  ).text();\n  return new (typo_js__WEBPACK_IMPORTED_MODULE_1___default())(\"ru\", aff_data, dic_data);\n}\n\nconst advancePosition = (stream, n) => {\n  for (let i = 0; i < n; i++) {\n    if (stream.eol()) break;\n    stream.next();\n  }\n}\n\n\n//# sourceURL=webpack://JB_task/./src/modes/spell-checker.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"defineSpellCheckerMode\": () => (/* binding */ defineSpellCheckerMode)\n/* harmony export */ });\n/* harmony import */ var codemirror__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! codemirror */ \"./node_modules/codemirror/lib/codemirror.js\");\n/* harmony import */ var codemirror__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(codemirror__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var typo_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! typo-js */ \"./node_modules/typo-js/typo.js\");\n/* harmony import */ var typo_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(typo_js__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var _utils_text_reader__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../utils/text-reader */ \"./src/utils/text-reader.js\");\n\n\n\n\nconst heuristicAlphabetRegex = {\n  \"ru\": /[а-яА-Я0-9-]/g,\n  \"en-US\": /[\\w-]/g,\n};\n\nconst defineSpellCheckerMode = (underlyingTokenAnalyzer) => {\n  const dictionaries = [];\n\n  const worker = new Worker(new URL(/* worker import */ __webpack_require__.p + __webpack_require__.u(\"src_modes_spell-checker_create-typos_js\"), __webpack_require__.b));\n\n  loadEnUSDictionary(worker);\n  loadRUDictionary(worker);\n\n  let dictionariesLoaded = 0;\n\n  worker.onmessage = e => {\n    dictionariesLoaded += 1;\n\n    const lightTypo = Object.create((typo_js__WEBPACK_IMPORTED_MODULE_1___default().prototype));\n\n    const typeProxy = new Proxy(lightTypo, {\n      get(target, prop, receiver) {\n        if (typeof target[prop] !== 'function') {  \n          return e.data[prop];\n        }\n        return Reflect.get(target, prop, receiver);\n      },\n      set(target, prop, val, receiver) {\n        if (typeof target[prop] !== 'function') {  \n          e.data[prop] = val;\n        } else {\n          Reflect.set(target, prop, val, receiver);\n        }\n        return true;\n      }\n    });\n\n    dictionaries.push(typeProxy);\n\n    if (dictionariesLoaded == 2) {\n      worker.terminate();\n    }\n  };\n\n  codemirror__WEBPACK_IMPORTED_MODULE_0___default().defineMode(\"spell-checker\", (codeMirrorConfig, modeConfig) => {\n    return {\n      token(stream) {\n        const baseToken = stream.baseToken();\n        if (underlyingTokenAnalyzer.shouldTokenBeChecked(baseToken)) {\n          const word = underlyingTokenAnalyzer.extractWordFromStream(stream);\n          if (word.length) {\n            advancePosition(stream, word.length);\n            if (dictionaries.length > 0 && !spellWordWithKnownDictionaries(dictionaries, word)) {\n              return \"error\";\n            }\n            return null;\n          }\n          stream.next();\n          return null;\n        }\n        advancePosition(stream, baseToken.size);\n        return null;\n      },\n    };\n  });\n\n  return {\n    getSuggestions(codeEditor, max = 3) {\n      const position = codeEditor.getDoc().getCursor();\n      const token = codeEditor.getTokenAt(position);\n      const words = underlyingTokenAnalyzer.extractWordsFromToken(token);\n      const results = [];\n      let startIndex = 0;\n      for (let word of words) {\n        const findIndex = token.string.indexOf(word, startIndex);\n        const suggestions = suggestionWordWithKnownDictionaries(dictionaries, word);\n        if (suggestions.length > 0) {  \n          results.push({\n            from: {\n              line: position.line,\n              ch: token.start + findIndex\n            },\n            to: {\n              line: position.line,\n              ch: token.start + findIndex + word.length - 1,\n            },\n            suggestions: suggestions.slice(0, max),\n          });\n        }\n      }\n      return results; \n    }\n  }\n};\n\n/*\n  Simple heuristics dictionary selection algorithm\n  Similarity - coefficient between [0, 1], which is determined by the formula coef = n/N\n  where n - count of alphabet regex matched letters\n  N - length of incoming word \n\n  Check the word if its max coefficient greater than 0.5\n*/    \nconst spellWordWithKnownDictionaries = (dictionaries, word) => {\n  const { typo, maxSimilarity } = getMaxSimilarity(dictionaries, word);\n\n  if (maxSimilarity > 0.5) {\n    return typo.check(word);\n  }\n\n  return true;\n}\n\nconst suggestionWordWithKnownDictionaries = (dictionaries, word) => {\n  const { typo, maxSimilarity } = getMaxSimilarity(dictionaries, word);\n\n  if (maxSimilarity > 0.5) {\n    return typo.suggest(word);\n  }\n  return [];\n}\n\nconst getMaxSimilarity = (dictionaries, word) => {\n  let chosenTypo = null;\n  let maxSimilarity = 0;\n  if (word.length === 0) {\n    return { typo: dictionaries[0], maxSimilarity: 0 };\n  }  \n  for (let typo of dictionaries) {\n    const regex = heuristicAlphabetRegex[typo.dictionary];\n    if (!regex) continue;\n    const similarity = calcDictionaryMaxSimilarity(typo, word);\n    if (similarity > maxSimilarity) {\n      maxSimilarity = similarity;\n      chosenTypo = typo;\n    }\n  }\n  return { typo: chosenTypo, maxSimilarity };\n}\n\nconst calcDictionaryMaxSimilarity = (typo, word) => {\n  const match = word.match(heuristicAlphabetRegex[typo.dictionary]);\n  if (match === null) return 0;\n  const letter_matches_count = match.reduce((acc, s) => acc + s.length, 0);\n  return letter_matches_count / word.length;\n}\n\nconst loadEnUSDictionary = async (worker) => {\n  const aff_data = await (\n    await fetch(\n      \"/dictionaries/en-US/index.aff\"\n    )\n  ).text();\n  const dic_data = await (\n    await fetch(\n      \"/dictionaries/en-US/index.dic\"\n    )\n  ).text();\n  worker.postMessage([\"en-US\", aff_data, dic_data]);\n};\n\nconst loadRUDictionary = async (worker) => {\n  const aff_data = await (0,_utils_text_reader__WEBPACK_IMPORTED_MODULE_2__.readTextFromStream)((\n    await fetch(\n      \"/dictionaries/ru/index.aff\"\n    )\n  ).body);\n  const dic_data = await (0,_utils_text_reader__WEBPACK_IMPORTED_MODULE_2__.readTextFromStream)((\n    await fetch(\n      \"/dictionaries/ru/index.dic\"\n    )\n  ).body);\n\n  worker.postMessage([\"ru\", aff_data, dic_data]);\n}\n\nconst advancePosition = (stream, n) => {\n  for (let i = 0; i < n; i++) {\n    if (stream.eol()) break;\n    stream.next();\n  }\n}\n\n\n//# sourceURL=webpack://JB_task/./src/modes/spell-checker/index.js?");
 
 /***/ }),
 
@@ -141,6 +141,17 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 
 "use strict";
 eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"SuggestionDisplay\": () => (/* binding */ SuggestionDisplay)\n/* harmony export */ });\n\r\n\r\n// #todo Simple text field, should be replaced with a modal\r\nclass SuggestionDisplay {\r\n  constructor(props) {\r\n    this.element = document.createElement('p');\r\n    this.element.textContent = 'Предложения по исправлению: ';\r\n    this.suggestionsContainer = document.createElement('strong');\r\n    this.element.appendChild(this.suggestionsContainer);\r\n  }\r\n  \r\n  getElement() {\r\n    return this.element;\r\n  }\r\n\r\n  addSuggestions(suggestions) {\r\n    this.suggestionsContainer.textContent = suggestions.join(', ');\r\n  }\r\n\r\n  clear() {\r\n    this.suggestionsContainer.textContent = '';\r\n  }\r\n}\n\n//# sourceURL=webpack://JB_task/./src/sugggestion-display.js?");
+
+/***/ }),
+
+/***/ "./src/utils/text-reader.js":
+/*!**********************************!*\
+  !*** ./src/utils/text-reader.js ***!
+  \**********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"readTextFromStream\": () => (/* binding */ readTextFromStream)\n/* harmony export */ });\n\r\n\r\n/**\r\n * @param {ReadableStream} stream\r\n * @returns {Promise}\r\n */\r\nconst readTextFromStream = async (stream) => {\r\n  const reader = stream.getReader();\r\n  const textDecoder = new TextDecoder();\r\n\r\n  let length = 0;\r\n  const chunks = [];\r\n\r\n  while (true) {\r\n    const { done, value } = await reader.read();\r\n\r\n    if (done) break;\r\n\r\n    chunks.push(value);\r\n    length += value.length;\r\n  }\r\n\r\n  const byteArray = new Uint8Array(length);\r\n  let position = 0;\r\n\r\n  for (let chunk of chunks) {\r\n    byteArray.set(chunk, position);\r\n    position += chunk.length;\r\n  }\r\n\r\n  console.log(\"done\");\r\n\r\n  return String(new TextDecoder().decode(byteArray));\r\n}\n\n//# sourceURL=webpack://JB_task/./src/utils/text-reader.js?");
 
 /***/ }),
 
@@ -180,6 +191,9 @@ eval("/* (ignored) */\n\n//# sourceURL=webpack://JB_task/fs_(ignored)?");
 /******/ 		return module.exports;
 /******/ 	}
 /******/ 	
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = __webpack_modules__;
+/******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/compat get default export */
 /******/ 	(() => {
@@ -202,6 +216,15 @@ eval("/* (ignored) */\n\n//# sourceURL=webpack://JB_task/fs_(ignored)?");
 /******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
 /******/ 				}
 /******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/get javascript chunk filename */
+/******/ 	(() => {
+/******/ 		// This function allow to reference async chunks
+/******/ 		__webpack_require__.u = (chunkId) => {
+/******/ 			// return url for filenames based on template
+/******/ 			return "" + chunkId + ".js";
 /******/ 		};
 /******/ 	})();
 /******/ 	
@@ -231,6 +254,52 @@ eval("/* (ignored) */\n\n//# sourceURL=webpack://JB_task/fs_(ignored)?");
 /******/ 			}
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/publicPath */
+/******/ 	(() => {
+/******/ 		var scriptUrl;
+/******/ 		if (__webpack_require__.g.importScripts) scriptUrl = __webpack_require__.g.location + "";
+/******/ 		var document = __webpack_require__.g.document;
+/******/ 		if (!scriptUrl && document) {
+/******/ 			if (document.currentScript)
+/******/ 				scriptUrl = document.currentScript.src
+/******/ 			if (!scriptUrl) {
+/******/ 				var scripts = document.getElementsByTagName("script");
+/******/ 				if(scripts.length) scriptUrl = scripts[scripts.length - 1].src
+/******/ 			}
+/******/ 		}
+/******/ 		// When supporting browsers where an automatic publicPath is not supported you must specify an output.publicPath manually via configuration
+/******/ 		// or pass an empty string ("") and set the __webpack_public_path__ variable from your code to use your own logic.
+/******/ 		if (!scriptUrl) throw new Error("Automatic publicPath is not supported in this browser");
+/******/ 		scriptUrl = scriptUrl.replace(/#.*$/, "").replace(/\?.*$/, "").replace(/\/[^\/]+$/, "/");
+/******/ 		__webpack_require__.p = scriptUrl;
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/jsonp chunk loading */
+/******/ 	(() => {
+/******/ 		__webpack_require__.b = document.baseURI || self.location.href;
+/******/ 		
+/******/ 		// object to store loaded and loading chunks
+/******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
+/******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
+/******/ 		var installedChunks = {
+/******/ 			"main": 0
+/******/ 		};
+/******/ 		
+/******/ 		// no chunk on demand loading
+/******/ 		
+/******/ 		// no prefetching
+/******/ 		
+/******/ 		// no preloaded
+/******/ 		
+/******/ 		// no HMR
+/******/ 		
+/******/ 		// no HMR manifest
+/******/ 		
+/******/ 		// no on chunks loaded
+/******/ 		
+/******/ 		// no jsonp function
 /******/ 	})();
 /******/ 	
 /************************************************************************/
