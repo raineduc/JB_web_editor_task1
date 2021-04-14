@@ -1,5 +1,6 @@
 import CodeMirror from "codemirror";
 import Typo from "typo-js";
+import { TypoLoader } from './typo-loader';
 import { readTextFromStream } from '../../utils/text-reader';
 
 const heuristicAlphabetRegex = {
@@ -11,40 +12,26 @@ export const defineSpellCheckerMode = (underlyingTokenAnalyzer) => {
   const dictionaries = [];
 
   const worker = new Worker(new URL('./create-typos.js', import.meta.url));
-
-  loadEnUSDictionary(worker);
-  loadRUDictionary(worker);
+  const typoLoader = new TypoLoader(worker);
 
   let dictionariesLoaded = 0;
 
-  worker.onmessage = e => {
-    dictionariesLoaded += 1;
-
-    const lightTypo = Object.create(Typo.prototype);
-
-    const typeProxy = new Proxy(lightTypo, {
-      get(target, prop, receiver) {
-        if (typeof target[prop] !== 'function') {  
-          return e.data[prop];
-        }
-        return Reflect.get(target, prop, receiver);
-      },
-      set(target, prop, val, receiver) {
-        if (typeof target[prop] !== 'function') {  
-          e.data[prop] = val;
-        } else {
-          Reflect.set(target, prop, val, receiver);
-        }
-        return true;
-      }
+  loadEnUSDictionary(typoLoader)
+    .then(typo => {
+      dictionaries.push(typo);
+      dictionariesLoaded += 1;
+    });
+  loadRUDictionary(typoLoader)
+    .then(typo => {
+      dictionaries.push(typo);
+      dictionariesLoaded += 1;
     });
 
-    dictionaries.push(typeProxy);
-
+  worker.addEventListener('message', e => {
     if (dictionariesLoaded == 2) {
-      worker.terminate();
+      typoLoader.closeWorker();
     }
-  };
+  });
 
   CodeMirror.defineMode("spell-checker", (codeMirrorConfig, modeConfig) => {
     return {
@@ -149,33 +136,34 @@ const calcDictionaryMaxSimilarity = (typo, word) => {
   return letter_matches_count / word.length;
 }
 
-const loadEnUSDictionary = async (worker) => {
-  const aff_data = await (
+const loadEnUSDictionary = async (typoLoader) => {
+  const affData = await (
     await fetch(
       "/dictionaries/en-US/index.aff"
     )
   ).text();
-  const dic_data = await (
+  const dicData = await (
     await fetch(
       "/dictionaries/en-US/index.dic"
     )
   ).text();
-  worker.postMessage(["en-US", aff_data, dic_data]);
+
+  return typoLoader.postDictionaryData("en-US", affData, dicData);
 };
 
-const loadRUDictionary = async (worker) => {
-  const aff_data = await readTextFromStream((
+const loadRUDictionary = async (typoLoader) => {
+  const affData = await readTextFromStream((
     await fetch(
       "/dictionaries/ru/index.aff"
     )
   ).body);
-  const dic_data = await readTextFromStream((
+  const dicData = await readTextFromStream((
     await fetch(
       "/dictionaries/ru/index.dic"
     )
   ).body);
 
-  worker.postMessage(["ru", aff_data, dic_data]);
+  return typoLoader.postDictionaryData("ru", affData, dicData);
 }
 
 const advancePosition = (stream, n) => {
