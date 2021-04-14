@@ -1,5 +1,7 @@
 import CodeMirror from "codemirror";
 import Typo from "typo-js";
+import { TypoLoader } from './typo-loader';
+import { readTextFromStream } from '../../utils/text-reader';
 
 const heuristicAlphabetRegex = {
   "ru": /[а-яА-Я0-9-]/g,
@@ -9,13 +11,26 @@ const heuristicAlphabetRegex = {
 export const defineSpellCheckerMode = (underlyingTokenAnalyzer) => {
   const dictionaries = [];
 
-  loadEnUSDictionary().then((typo) => {
-    dictionaries.push(typo);
-    dictionaries[typo.dictionary] = typo;
-  });
+  const worker = new Worker(new URL('./create-typos.js', import.meta.url));
+  const typoLoader = new TypoLoader(worker);
 
-  loadRUDictionary().then((typo) => {
-    dictionaries.push(typo);
+  let dictionariesLoaded = 0;
+
+  loadEnUSDictionary(typoLoader)
+    .then(typo => {
+      dictionaries.push(typo);
+      dictionariesLoaded += 1;
+    });
+  loadRUDictionary(typoLoader)
+    .then(typo => {
+      dictionaries.push(typo);
+      dictionariesLoaded += 1;
+    });
+
+  worker.addEventListener('message', e => {
+    if (dictionariesLoaded == 2) {
+      typoLoader.closeWorker();
+    }
   });
 
   CodeMirror.defineMode("spell-checker", (codeMirrorConfig, modeConfig) => {
@@ -26,13 +41,16 @@ export const defineSpellCheckerMode = (underlyingTokenAnalyzer) => {
           const word = underlyingTokenAnalyzer.extractWordFromStream(stream);
           if (word.length) {
             advancePosition(stream, word.length);
-            if (dictionaries.length && !spellWordWithKnownDictionaries(dictionaries, word)) {
+            if (dictionaries.length > 0 && !spellWordWithKnownDictionaries(dictionaries, word)) {
               return "error";
             }
             return null;
           }
+          stream.next();
+          return null;
         }
-        stream.next();
+        advancePosition(stream, baseToken.size);
+        return null;
       },
     };
   });
@@ -118,32 +136,34 @@ const calcDictionaryMaxSimilarity = (typo, word) => {
   return letter_matches_count / word.length;
 }
 
-const loadEnUSDictionary = async () => {
-  const aff_data = await (
+const loadEnUSDictionary = async (typoLoader) => {
+  const affData = await (
     await fetch(
       "/dictionaries/en-US/index.aff"
     )
   ).text();
-  const dic_data = await (
+  const dicData = await (
     await fetch(
       "/dictionaries/en-US/index.dic"
     )
   ).text();
-  return new Typo("en-US", aff_data, dic_data);
+
+  return typoLoader.postDictionaryData("en-US", affData, dicData);
 };
 
-const loadRUDictionary = async () => {
-  const aff_data = await (
+const loadRUDictionary = async (typoLoader) => {
+  const affData = await readTextFromStream((
     await fetch(
       "/dictionaries/ru/index.aff"
     )
-  ).text();
-  const dic_data = await (
+  ).body);
+  const dicData = await readTextFromStream((
     await fetch(
       "/dictionaries/ru/index.dic"
     )
-  ).text();
-  return new Typo("ru", aff_data, dic_data);
+  ).body);
+
+  return typoLoader.postDictionaryData("ru", affData, dicData);
 }
 
 const advancePosition = (stream, n) => {
