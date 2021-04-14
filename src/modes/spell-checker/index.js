@@ -1,7 +1,5 @@
 import CodeMirror from "codemirror";
-import Typo from "typo-js";
 import { TypoLoader } from './typo-loader';
-import { readTextFromStream } from '../../utils/text-reader';
 
 const heuristicAlphabetRegex = {
   "ru": /[а-яА-Я0-9-]/g,
@@ -152,16 +150,16 @@ const loadEnUSDictionary = async (typoLoader) => {
 };
 
 const loadRUDictionary = async (typoLoader) => {
-  const affData = await readTextFromStream((
+  const affData = await (
     await fetch(
       "/dictionaries/ru/index.aff"
     )
-  ).body);
-  const dicData = await readTextFromStream((
+  ).text();
+  const dicData = await (
     await fetch(
       "/dictionaries/ru/index.dic"
     )
-  ).body);
+  ).text();
 
   return typoLoader.postDictionaryData("ru", affData, dicData);
 }
